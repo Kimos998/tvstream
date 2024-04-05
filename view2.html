@@ -126,22 +126,6 @@ margin-left: 6%;
 
 
 
-const listItems = document.getElementById('channels-list').getElementsByTagName('li');
-for (let i = 4; i < listItems.length; i++) {
-  listItems[i].style.display = 'none';
-}
-
-const showMoreButton = document.createElement('button');
-showMoreButton.textContent = 'Show More';
-showMoreButton.addEventListener('click', () => {
-  for (let i = 4; i < listItems.length; i++) {
-    listItems[i].style.display = 'block';
-  }
-  showMoreButton.style.display = 'none';
-});
-
-document.getElementById('channels-list-container').appendChild(showMoreButton);
-
 
    
 </script>
