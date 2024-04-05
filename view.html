@@ -43,9 +43,11 @@
             color: darkgray; /* Cambiar color del texto al pasar el mouse */
             cursor: pointer; /* Cambiar el cursor al pasar el mouse */
         }
-        #videoPlayer {
-            width: 100%;
-        }
+        #player {
+    width: 90%; /* عرض المشغل يأخذ 90٪ من عرض العمود */
+    max-width: 100%; /* لضمان عدم تجاوز الحد الأقصى لعرض المشغل */
+    height: auto; /* تلقائيًا بناءً على عرض المشغل */
+}
     </style>
 </head>
 <body>
