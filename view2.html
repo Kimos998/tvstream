@@ -52,6 +52,13 @@
            color: darkgray; /* Cambiar color del texto al pasar el mouse */
            cursor: pointer; /* Cambiar el cursor al pasar el mouse */
        }
+
+#channels-list-container {
+  height: 400px; /* حدد الارتفاع */
+}
+
+
+      
 #player {
    width: 100%; /* يأخذ المشغل عرض العمود بالكامل */
    height: auto; /* تلقائيًا بناءً على عرض المشغل */
@@ -65,6 +72,10 @@
    <div class="column" style="background-color: #f0f0f0;">
        <video id="player" controls autoplay></video>
    </div>
+
+
+
+   
    <div class="column" style="background-color: #ddd;">
       <div id="channels-list-container">
         <ul id="channels-list"></ul>
@@ -109,6 +120,28 @@
             player.src = channelUrl;
         }
     }
+
+
+
+
+const listItems = document.getElementById('channels-list').getElementsByTagName('li');
+for (let i = 4; i < listItems.length; i++) {
+  listItems[i].style.display = 'none';
+}
+
+const showMoreButton = document.createElement('button');
+showMoreButton.textContent = 'Show More';
+showMoreButton.addEventListener('click', () => {
+  for (let i = 4; i < listItems.length; i++) {
+    listItems[i].style.display = 'block';
+  }
+  showMoreButton.style.display = 'none';
+});
+
+document.getElementById('channels-list-container').appendChild(showMoreButton);
+
+
+   
 </script>
 </body>
 </html>
