@@ -1,75 +1,76 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TV Channels</title>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-       
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            display: flex; /* استخدم Flexbox */
-            flex-wrap: wrap; /* يسمح للعناصر بالتفاف عندما لا تكون هناك مساحة كافية */
-        }
-        .column {
-            flex: 1 1 90%; /* التوسعة والانكماش مع الحفاظ على 90٪ من عرض العمود */
-            padding: 10px;
-            box-sizing: border-box;
-        }
-        @media screen and (min-width: 768px) { /* قم بتعديل توسعة العمود في الشاشات الكبيرة */
-            .column {
-                flex: 1 1 50%;
-            }
-        }
-        @media screen and (min-width: 1200px) { /* قم بتعديل توسعة العمود في الشاشات الكبيرة جدًا */
-            .column {
-                flex: 1 1 33.33%;
-            }
-        }
-        .clearfix::after {
-            content: "";
-            clear: both;
-            display: table;
-             margin-left: 6%;
-            
-        }
-        /* Agregar estilos CSS para mejorar el diseño */
-        #channels-list {
-            list-style-type: none; /* إزالة نقاط الترقيم */
-            overflow-y: auto; /* إضافة شريط تمرير عند الحاجة */
-            max-height: 400px; /* حدد الارتفاع الأقصى للقائمة ليظهر الشريط فقط إذا كان هناك مزيد من العناصر */
-            padding: 0;
-            margin: 0;
-        }
-        #channels-list li:hover {
-            color: darkgray; /* Cambiar color del texto al pasar el mouse */
-            cursor: pointer; /* Cambiar el cursor al pasar el mouse */
-        }
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>TV Channels</title>
+   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+   <style>
+       body {
+           font-family: Arial, sans-serif;
+           margin: 0;
+           padding: 0;
+       }
+
+       .container {
+           max-width: 1200px;
+           margin: 0 auto;
+           padding: 20px;
+           display: flex; /* استخدم Flexbox */
+           flex-wrap: wrap; /* يسمح للعناصر بالتفاف عندما لا تكون هناك مساحة كافية */
+       }
+       .column {
+           flex: 1 1 90%; /* التوسعة والانكماش مع الحفاظ على 90٪ من عرض العمود */
+           padding: 10px;
+           box-sizing: border-box;
+       }
+       @media screen and (min-width: 768px) { /* قم بتعديل توسعة العمود في الشاشات الكبيرة */
+           .column {
+               flex: 1 1 50%;
+           }
+       }
+       @media screen and (min-width: 1200px) { /* قم بتعديل توسعة العمود في الشاشات الكبيرة جدًا */
+           .column {
+               flex: 1 1 33.33%;
+           }
+       }
+       .clearfix::after {
+           content: "";
+           clear: both;
+           display: table;
+            margin-left: 6%;
+
+       }
+       /* Agregar estilos CSS para mejorar el diseño */
+       #channels-list {
+           height: 400px; /* حدد الارتفاع */
+           overflow-y: auto; /* إضافة شريط تمرير عند الحاجة */
+           padding: 0;
+           margin: 0;
+           list-style-type: none; /* إزالة نقاط الترقيم */
+       }
+       #channels-list li:hover {
+           color: darkgray; /* Cambiar color del texto al pasar el mouse */
+           cursor: pointer; /* Cambiar el cursor al pasar el mouse */
+       }
 #player {
-    width: 100%; /* يأخذ المشغل عرض العمود بالكامل */
-    height: auto; /* تلقائيًا بناءً على عرض المشغل */
+   width: 100%; /* يأخذ المشغل عرض العمود بالكامل */
+   height: auto; /* تلقائيًا بناءً على عرض المشغل */
 }
-    </style>
+   </style>
 </head>
 <body>
-     <div class="clearfix"> <h1 id="country-name"></h1></div>
+    <div class="clearfix"> <h1 id="country-name"></h1></div>
 <div class="container">
 
-    <div class="column" style="background-color: #f0f0f0;">
-        <video id="player" controls autoplay></video>
-    </div>
-    <div class="column" style="background-color: #ddd;">
+   <div class="column" style="background-color: #f0f0f0;">
+       <video id="player" controls autoplay></video>
+   </div>
+   <div class="column" style="background-color: #ddd;">
+      <div id="channels-list-container">
         <ul id="channels-list"></ul>
-    </div>
-    <div class="clearfix"></div>
+      </div>
+   </div>
+   <div class="clearfix"></div>
 </div>
 <script>
     const urlParams = new URLSearchParams(window.location.search);
