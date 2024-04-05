@@ -49,9 +49,30 @@ width: 100%;
 
   
 <body>
+<div class="container">
+
+
+<div class="clearfix">
   <h1 id="country-name"></h1>
-  <video id="player" controls autoplay></video>
-  <ul id="channels-list"></ul>
+    </div>
+
+    <div class="column" style="background-color: #f0f0f0;">
+ <video id="player" controls autoplay></video>
+    </div>
+
+    
+    <div class="column" style="background-color: #ddd;">
+    <ul id="channels-list"></ul> 
+    </div>
+
+    
+    <div class="clearfix">
+  
+    </div>
+    
+</div>
+
+
 
   <script>
     const urlParams = new URLSearchParams(window.location.search);
