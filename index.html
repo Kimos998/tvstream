@@ -64,7 +64,7 @@
         const uniqueCountries = new Set(data.values.slice(1).map(item => item[1])); // Ignoring the first row (titles)
         uniqueCountries.forEach(countryName => {
           const listItem = document.createElement('li');
-          listItem.innerHTML = `<a href="view.html?country=${encodeURIComponent(countryName)}">${countryName}</a>`;
+          listItem.innerHTML = `<a href="view1.html?country=${encodeURIComponent(countryName)}">${countryName}</a>`;
           countriesList.appendChild(listItem);
         });
       })
