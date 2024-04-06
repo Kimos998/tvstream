@@ -42,18 +42,24 @@ margin-left: 6%;
             margin-left: 6%;
 
        }
-       /* Agregar estilos CSS para mejorar el diseño */
-       #channels-list {
-           height: 400px; /* حدد الارتفاع */
-           overflow-y: auto; /* إضافة شريط تمرير عند الحاجة */
-           padding: 0;
-           margin: 0;
-           list-style-type: none; /* إزالة نقاط الترقيم */
-       }
-       #channels-list li:hover {
-           color: darkgray; /* Cambiar color del texto al pasar el mouse */
-           cursor: pointer; /* Cambiar el cursor al pasar el mouse */
-       }
+     /* CSS for scrollable list */
+#channels-list {
+    list-style-type: none; /* Remove default list styles */
+    padding: 0;
+    margin: 0;
+    max-height: 300px; /* Set max height for the list */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+#channels-list li {
+    padding: 10px; /* Add padding to each list item */
+}
+
+#channels-list li:hover {
+    color: darkgray; /* Change text color on hover */
+    cursor: pointer; /* Change cursor on hover */
+}
+
 
 #channels-list-container {
   height: 400px; /* حدد الارتفاع */
