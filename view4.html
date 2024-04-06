@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TV Channels</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+h1 {
+margin-left: 6%;
+            }
+      
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex; /* استخدم Flexbox */
+            flex-wrap: wrap; /* يسمح للعناصر بالتفاف عندما لا تكون هناك مساحة كافية */
+        }
+        .column {
+            flex: 1 1 90%; /* التوسعة والانكماش مع الحفاظ على 90٪ من عرض العمود */
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        @media screen and (min-width: 768px) { /* قم بتعديل توسعة العمود في الشاشات الكبيرة */
+            .column {
+                flex: 1 1 50%;
+            }
+        }
+        @media screen and (min-width: 1200px) { /* قم بتعديل توسعة العمود في الشاشات الكبيرة جدًا */
+            .column {
+                flex: 1 1 33.33%;
+            }
+        }
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+        /* Agregar estilos CSS para mejorar el diseño */
+        #channels-list {
+            list-style: none; /* Remove default bullet points */
+            overflow-y: auto; /* Enable vertical scrolling */
+            max-height: 300px; /* Set max height for scroll */
+            padding: 0; /* Remove default padding */
+            margin: 0; /* Remove default margin */
+            border: 1px solid #ddd; /* Add border for aesthetics */
+        }
+        #channels-list li {
+            padding: 10px; /* Add padding for spacing */
+            border-bottom: 1px solid #ddd; /* Add bottom border for separation */
+            color: #808080; /* Gray text color */
+            background-color: #ffffff; /* White background color */
+            transition: color 0.3s, background-color 0.3s; /* Add transition effect */
+        }
+        #channels-list li:hover {
+            color: #000000; /* Black text color on hover */
+            background-color: #f0f0f0; /* Gray background color on hover */
+        }
+        #player {
+            width: 100%; /* يأخذ المشغل عرض العمود بالكامل */
+            height: auto; /* تلقائيًا بناءً على عرض المشغل */
+        }
+    </style>
+</head>
+<body>
+<div class="clearfix"> <h1 id="country-name"></h1></div>
+<div class="container">
+    <div class="column" style="background-color: #f0f0f0;">
+        <video id="player" controls autoplay></video>
+    </div>
+    <div class="column" style="background-color: #ddd;">
+        <ul id="channels-list"></ul>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const countryName = urlParams.get('country');
+    document.getElementById('country-name').textContent = countryName;
+
+    fetch('https://sheets.googleapis.com/v4/spreadsheets/1Nc1LNBUnUyJNV9dnJ10QFh8tMsjA_nQxRS9mKw4xFHI/values/Sheet1!A1:I100?key=AIzaSyB5WTjIR5OZt108xl9uQApzeoNRWuMyYRE')
+        .then(response => response.json())
+        .then(data => {
+            const channelsList = document.getElementById('channels-list');
+            const player = document.getElementById('player');
+
+            data.values.forEach(channelData => {
+                if (channelData[1] === countryName) {
+                    const channelName = channelData[2];
+                    const channelUrl = channelData[3];
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `<a href="#" onclick="playChannel('${channelUrl}')">${channelName}</a>`;
+                    channelsList.appendChild(listItem);
+                }
+            });
+
+            // Play the default channel from the country
+            const defaultChannelUrl = data.values.find(channel => channel[1] === countryName)[3];
+            playChannel(defaultChannelUrl);
+        })
+        .catch(error => console.error('Error fetching data:', error));
+
+    function playChannel(channelUrl) {
+        const player = document.getElementById('player');
+        if (Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(channelUrl);
+            hls.attachMedia(player);
+        } else if (player.canPlayType('application/vnd.apple.mpegurl')) {
+            player.src = channelUrl;
+        }
+    }
+</script>
+</body>
+</html>
