@@ -1,74 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TV Channels</title>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <style>
-        /* أضف أي تعديلات على الأنماط الخاصة بك هنا */
-
-        /* زر تخطي الإعلان */
-        #skip-ad-button {
-            display: none; /* يتم إخفاء الزر بشكل افتراضي */
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TV Channels</title>
 </head>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .column {
+        float: left;
+        width: 50%; /* عرض العمودين في الشاشات العريضة */
+        padding: 10px;
+        box-sizing: border-box;
+    }
+    @media screen and (max-width: 767px) { /* تقليص العمودين لعرض عمود واحد في الشاشات الصغيرة */
+        .column {
+            width: 100%;
+        }
+    }
+    .clearfix::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+    /* إخفاء الفيديو الإعلاني عند البدء */
+    #ad-video {
+        display: none;
+    }
+</style>
+
 <body>
-<div class="clearfix"> <h1 id="country-name"></h1></div>
+
 <div class="container">
-    <div class="column" style="background-color: #f0f0f0;">
-        <video id="player" controls autoplay></video>
-        <button id="skip-ad-button" onclick="skipAd()">تخطي الإعلان</button>
-    </div>
-    <div class="column" style="background-color: #ddd;">
-        <ul id="channels-list"></ul>
-    </div>
-    <div class="clearfix"></div>
+ <div class="clearfix">
+ <h1>TV Channels</h1>
+ </div>
+   <ul id="countries-list"></ul>
+ </div>
+
+<!-- إضافة الفيديو الإعلاني -->
+<div id="ad-video-container">
+    <video id="ad-video" controls>
+        <source src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+    </video>
 </div>
+
 <script>
-   function playChannel(channelUrl) {
-    const player = document.getElementById('player');
-    if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(channelUrl);
-        hls.attachMedia(player);
-        hls.on(Hls.Events.MANIFEST_PARSED, function() {
-            // Show the skip ad button after 5 seconds
-            setTimeout(function() {
-                document.getElementById('skip-ad-button').style.display = 'block';
-            }, 5000);
+    // Fetch data from data.json
+    fetch('https://sheets.googleapis.com/v4/spreadsheets/1Nc1LNBUnUyJNV9dnJ10QFh8tMsjA_nQxRS9mKw4xFHI/values/Sheet1!A1:I100?key=AIzaSyB5WTjIR5OZt108xl9uQApzeoNRWuMyYRE')
+      .then(response => response.json())
+      .then(data => {
+        const countriesList = document.getElementById('countries-list');
+        const uniqueCountries = new Set(data.values.slice(1).map(item => item[1])); // Ignoring the first row (titles)
+        uniqueCountries.forEach(countryName => {
+          const listItem = document.createElement('li');
+          listItem.innerHTML = `<a href="view5.html?country=${encodeURIComponent(countryName)}">${countryName}</a>`;
+          countriesList.appendChild(listItem);
         });
-    } else if (player.canPlayType('application/vnd.apple.mpegurl')) {
-        player.src = channelUrl;
-        player.play(); // Auto-play the channel
-        // Show the skip ad button after 5 seconds
+        
+        // Show the ad video after 5 seconds
         setTimeout(function() {
-            document.getElementById('skip-ad-button').style.display = 'block';
+            document.getElementById('ad-video').style.display = 'block';
+            // Play the ad video
+            document.getElementById('ad-video').play();
+            // After 5 seconds, hide the ad video and play the selected channel
+            setTimeout(function() {
+                document.getElementById('ad-video').style.display = 'none';
+                // Load the selected channel
+                const defaultChannelUrl = data.values.find(channel => channel[1] === countryName)[3];
+                window.location.href = `view5.html?country=${encodeURIComponent(countryName)}`;
+            }, 5000);
         }, 5000);
-    }
-}
-
-function skipAd() {
-    const player = document.getElementById('player');
-    const channelUrl = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
-    
-    // Hide the skip ad button
-    document.getElementById('skip-ad-button').style.display = 'none';
-
-    // Load and play the main channel
-    if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(channelUrl);
-        hls.attachMedia(player);
-        player.play(); // Auto-play the channel
-    } else if (player.canPlayType('video/mp4')) {
-        player.src = channelUrl;
-        player.play(); // Auto-play the channel
-    }
-}
-
+      })
+      .catch(error => console.error('Error fetching data:', error));
 </script>
 </body>
 </html>
-
